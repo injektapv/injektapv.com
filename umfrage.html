@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marktumfrage – InjektaPV</title>
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Helfen Sie uns den Markt zu verstehen. 3 Minuten, anonym.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { background: var(--cream); }
+
+    .survey-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .survey-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.25rem;
+    }
+    .survey-card {
+      background: #fff;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 640px;
+      padding: 2.75rem;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.07);
+    }
+
+    /* Fortschrittsbalken */
+    .s-progress {
+      height: 4px;
+      background: var(--warm-gray, #E5E1D8);
+      border-radius: 4px;
+      margin-bottom: 2.25rem;
+      overflow: hidden;
+    }
+    .s-progress-bar {
+      height: 100%;
+      background: var(--gold, #FED36F);
+      border-radius: 4px;
+      transition: width 0.4s ease;
+    }
+
+    /* Schritt-Label */
+    .s-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #505050;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .s-question {
+      font-size: clamp(1.1rem, 3vw, 1.45rem);
+      font-weight: 700;
+      color: #333;
+      margin-bottom: 0.4rem;
+      line-height: 1.25;
+    }
+    .s-hint {
+      font-size: 0.875rem;
+      color: #888;
+      margin-bottom: 1.75rem;
+    }
+
+    /* Antwort-Optionen */
+    .s-options { display: flex; flex-direction: column; gap: 0.625rem; margin-bottom: 2rem; }
+    .s-option {
+      border: 2px solid #E5E1D8;
+      border-radius: 10px;
+      padding: 0.875rem 1.25rem;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: #333;
+      cursor: pointer;
+      transition: border-color 0.18s, background 0.18s;
+      text-align: left;
+      background: #fff;
+      font-family: 'Poppins', sans-serif;
+    }
+    .s-option:hover   { border-color: #333; background: #f9f9f9; }
+    .s-option.chosen  { border-color: #333; background: rgba(51,51,51,0.05); }
+    .s-option.chosen:hover { background: rgba(51,51,51,0.08); }
+
+    /* Rating-Skala */
+    .s-rating {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+    .s-star {
+      flex: 1;
+      min-width: 44px;
+      border: 2px solid #E5E1D8;
+      border-radius: 10px;
+      padding: 0.75rem 0.5rem;
+      text-align: center;
+      cursor: pointer;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #666;
+      transition: all 0.18s;
+      background: #fff;
+      font-family: 'Poppins', sans-serif;
+    }
+    .s-star:hover  { border-color: #FED36F; background: #fffdf5; }
+    .s-star.chosen { border-color: #FED36F; background: #FED36F; color: #333; }
+    .s-rating-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.72rem;
+      color: #999;
+      margin-top: 0.35rem;
+      margin-bottom: 2rem;
+    }
+
+    /* E-Mail-Feld */
+    .s-input {
+      width: 100%;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.9375rem;
+      padding: 0.75rem 1rem;
+      border: 2px solid #E5E1D8;
+      border-radius: 10px;
+      outline: none;
+      margin-bottom: 2rem;
+      transition: border-color 0.18s;
+      background: var(--cream, #FBFAF6);
+    }
+    .s-input:focus { border-color: #333; background: #fff; }
+
+    /* Navigation */
+    .s-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .s-back {
+      background: none;
+      border: none;
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.875rem;
+      color: #888;
+      cursor: pointer;
+      padding: 0;
+    }
+    .s-back:hover { color: #333; }
+    .s-back:disabled { opacity: 0; pointer-events: none; }
+
+    /* Danke-Screen */
+    .s-done { display: none; text-align: center; padding: 2rem 0; }
+    .s-done.show { display: block; }
+    .s-done h2 { margin-bottom: 0.75rem; color: #333; }
+    .s-done p  { color: #505050; font-size: 0.9375rem; }
+    .s-done .done-icon { font-size: 3rem; margin-bottom: 1rem; }
+
+    /* Intro-Screen */
+    .s-intro { text-align: center; padding: 1rem 0 2rem; }
+    .s-intro h1 { font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 0.75rem; color: #333; }
+    .s-intro p  { color: #505050; max-width: 460px; margin: 0 auto 0.5rem; }
+    .s-intro small { color: #999; font-size: 0.8rem; display: block; margin-bottom: 2rem; }
+
+    @media (max-width: 520px) {
+      .survey-card { padding: 1.75rem 1.25rem; border-radius: 16px; }
+      .s-rating { gap: 0.35rem; }
+    }
+  </style>
+</head>
+<body class="survey-page">
+
+<div id="nav-placeholder"></div>
+
+<main class="survey-main">
+  <div class="survey-card">
+
+    <!-- INTRO -->
+    <div id="s-intro" class="s-intro">
+      <div style="font-size:2.5rem; margin-bottom:1rem;">📊</div>
+      <h1>Helfen Sie uns den Markt zu verstehen.</h1>
+      <p>Wir entwickeln eine neue Lösung für Haushalte mit PV-Anlage. Ihre Einschätzung hilft uns dabei, das Produkt besser zu machen.</p>
+      <small>Anonym · ca. 3 Minuten · 10 Fragen</small>
+      <button class="btn btn-primary" onclick="startSurvey()" style="width:100%; justify-content:center; font-size:1rem; padding:0.9rem 1.75rem;">
+        Umfrage starten →
+      </button>
+    </div>
+
+    <!-- FRAGEBOGEN -->
+    <div id="s-form" style="display:none;">
+      <div class="s-progress">
+        <div class="s-progress-bar" id="s-bar" style="width:0%"></div>
+      </div>
+      <span class="s-label" id="s-step-label"></span>
+      <h2 class="s-question" id="s-question"></h2>
+      <p  class="s-hint"     id="s-hint"></p>
+      <div id="s-answers"></div>
+      <div class="s-nav">
+        <button class="s-back" id="s-back" onclick="goBack()" disabled>← Zurück</button>
+        <span id="s-counter" style="font-size:0.8rem; color:#bbb;"></span>
+      </div>
+    </div>
+
+    <!-- DANKE -->
+    <div id="s-done" class="s-done">
+      <div class="done-icon">✓</div>
+      <h2>Vielen Dank!</h2>
+      <p>Ihr Feedback hilft uns, Injekta besser auf den Markt abzustimmen. Wir schätzen Ihre Zeit sehr.</p>
+      <a href="index.html" class="btn btn-primary" style="margin-top:1.5rem; display:inline-flex;">Zurück zur Startseite</a>
+    </div>
+
+    <!-- Versteckte Formspree-Daten -->
+    <form id="s-hidden-form" action="https://formspree.io/f/UMFRAGE_FORM_ID" method="POST" style="display:none;">
+      <input type="hidden" name="_subject" value="Neue Umfrageeinreichung – InjektaPV">
+      <input type="hidden" name="heizungstyp"       id="f-heizung">
+      <input type="hidden" name="pv_vorhanden"       id="f-pv">
+      <input type="hidden" name="pv_groesse"         id="f-pvgroesse">
+      <input type="hidden" name="batterie"           id="f-batterie">
+      <input type="hidden" name="gegen_batterie"     id="f-gegenbatterie">
+      <input type="hidden" name="waermepumpe"        id="f-wp">
+      <input type="hidden" name="gegen_wp"           id="f-gegenwp">
+      <input type="hidden" name="interesse_injekta"  id="f-interesse">
+      <input type="hidden" name="zahlungsbereit"     id="f-zahlung">
+      <input type="hidden" name="injekta_vs_batterie" id="f-vsbatterie">
+      <input type="hidden" name="email_optional"     id="f-email">
+    </form>
+
+  </div>
+</main>
+
+<div id="footer-placeholder"></div>
+<script src="components.js"></script>
+<script>
+// ===== UMFRAGE-LOGIK =====
+var answers = {};
+var steps   = [];
+var current = 0;
+
+// Alle möglichen Schritte
+var allSteps = [
+  {
+    id:       'heizung',
+    field:    'f-heizung',
+    label:    'Frage 1',
+    question: 'Welchen Heizungstyp haben Sie?',
+    hint:     '',
+    type:     'single',
+    options: [
+      { val: 'gas',      label: 'Gas- oder Ölheizung' },
+      { val: 'pellet',   label: 'Pellet- oder Holzheizung' },
+      { val: 'wp',       label: 'Wärmepumpe' },
+      { val: 'fern',     label: 'Fernwärme' },
+      { val: 'sonstig',  label: 'Sonstiges' }
+    ]
+  },
+  {
+    id:       'pv',
+    field:    'f-pv',
+    label:    'Frage 2',
+    question: 'Haben Sie eine PV-Anlage?',
+    hint:     '',
+    type:     'single',
+    options: [
+      { val: 'ja',      label: 'Ja, in Betrieb' },
+      { val: 'plan',    label: 'Ich plane eine' },
+      { val: 'nein',    label: 'Nein' }
+    ]
+  },
+  {
+    id:       'pvgroesse',
+    field:    'f-pvgroesse',
+    showIf:   function() { return answers.pv === 'ja' || answers.pv === 'plan'; },
+    label:    'Frage 3',
+    question: 'Wie groß ist Ihre PV-Anlage (oder geplante Größe)?',
+    hint:     'Die Leistung in kWp finden Sie auf Ihrem Einspeisevertrag oder Datenblatt.',
+    type:     'single',
+    options: [
+      { val: 'u5',   label: 'Unter 5 kWp' },
+      { val: '5-10', label: '5 bis 10 kWp' },
+      { val: 'u10',  label: 'Über 10 kWp' },
+      { val: 'wb',   label: 'Weiß ich nicht genau' }
+    ]
+  },
+  {
+    id:       'batterie',
+    field:    'f-batterie',
+    label:    'Frage 4',
+    question: 'Haben Sie einen Batteriespeicher?',
+    hint:     '',
+    type:     'single',
+    options: [
+      { val: 'ja',       label: 'Ja' },
+      { val: 'nein',     label: 'Nein, und ich plane auch keinen' },
+      { val: 'ueberlege', label: 'Ich überlege gerade, einen zu kaufen' }
+    ]
+  },
+  {
+    id:       'gegenbatterie',
+    field:    'f-gegenbatterie',
+    showIf:   function() { return answers.batterie === 'nein' || answers.batterie === 'ueberlege'; },
+    label:    'Frage 5',
+    question: 'Was spricht für Sie gegen einen Batteriespeicher?',
+    hint:     'Mehrere Antworten möglich.',
+    type:     'multi',
+    options: [
+      { val: 'kosten',   label: 'Die Investitionskosten sind zu hoch' },
+      { val: 'roi',      label: 'Ich bin unsicher, ob er sich lohnt' },
+      { val: 'alternativ', label: 'Ich suche eine günstigere Alternative' },
+      { val: 'kein',     label: 'Ich habe keinen hohen Strombedarf' },
+      { val: 'sonstig',  label: 'Sonstiges' }
+    ]
+  },
+  {
+    id:       'wp',
+    field:    'f-wp',
+    label:    'Frage 6',
+    question: 'Überlegen Sie, eine Wärmepumpe einzubauen?',
+    hint:     '',
+    type:     'single',
+    options: [
+      { val: 'ja-konkret', label: 'Ja, das ist konkret geplant' },
+      { val: 'denke',      label: 'Ich denke darüber nach' },
+      { val: 'nein',       label: 'Nein' },
+      { val: 'vorhanden',  label: 'Ich habe bereits eine' }
+    ]
+  },
+  {
+    id:       'gegenwp',
+    field:    'f-gegenwp',
+    showIf:   function() { return answers.wp === 'nein'; },
+    label:    'Frage 7',
+    question: 'Was hält Sie vom Einbau einer Wärmepumpe ab?',
+    hint:     'Mehrere Antworten möglich.',
+    type:     'multi',
+    options: [
+      { val: 'kosten',   label: 'Zu hohe Investitionskosten' },
+      { val: 'gebaeude', label: 'Mein Gebäude ist nicht geeignet' },
+      { val: 'aufwand',  label: 'Der Umbauaufwand ist mir zu groß' },
+      { val: 'heizung',  label: 'Meine jetzige Heizung reicht mir noch' },
+      { val: 'sonstig',  label: 'Sonstiges' }
+    ]
+  },
+  {
+    id:       'interesse',
+    field:    'f-interesse',
+    label:    'Frage 8',
+    question: 'Wie interessant finden Sie Injekta als Lösung für Ihren Haushalt?',
+    hint:     'Injekta wandelt PV-Überschussstrom direkt in Warmwasser um, ohne Eingriff in Ihren Speicher.',
+    type:     'rating',
+    labels:   ['gar nicht', 'sehr interessant'],
+    options: [
+      { val: '1', label: '1' },
+      { val: '2', label: '2' },
+      { val: '3', label: '3' },
+      { val: '4', label: '4' },
+      { val: '5', label: '5' }
+    ]
+  },
+  {
+    id:       'zahlung',
+    field:    'f-zahlung',
+    label:    'Frage 9',
+    question: 'Was wären Sie bereit, für Injekta zu zahlen?',
+    hint:     'Bei einem nachgewiesenen ROI von rund 8 Jahren.',
+    type:     'single',
+    options: [
+      { val: 'u500',    label: 'Unter 500 €' },
+      { val: '500-1k',  label: '500 bis 1.000 €' },
+      { val: '1k-2k',   label: '1.000 bis 2.000 €' },
+      { val: 'u2k',     label: 'Über 2.000 €' },
+      { val: 'roi',     label: 'Das hängt vom nachgewiesenen ROI ab' }
+    ]
+  },
+  {
+    id:       'vsbatterie',
+    field:    'f-vsbatterie',
+    label:    'Frage 10',
+    question: 'Sehen Sie Injekta als sinnvolle Alternative zu einem Batteriespeicher?',
+    hint:     'Injekta kostet deutlich weniger und hat eine kürzere Amortisationszeit.',
+    type:     'single',
+    options: [
+      { val: 'ja',        label: 'Ja, definitiv' },
+      { val: 'moeglich',  label: 'Möglicherweise' },
+      { val: 'nein',      label: 'Nein, ich sehe beides als unterschiedlich' },
+      { val: 'wb',        label: 'Ich brauche mehr Informationen' }
+    ]
+  },
+  {
+    id:       'email',
+    field:    'f-email',
+    label:    'Abschluss',
+    question: 'Möchten Sie über die Markteinführung informiert werden?',
+    hint:     'Optional. Nur eine E-Mail wenn Injekta verfügbar ist.',
+    type:     'email'
+  }
+];
+
+var TOTAL_REAL = 10; // sichtbare Fragen (ohne bedingte)
+
+function buildSteps() {
+  steps = allSteps.filter(function(s) {
+    return !s.showIf || s.showIf();
+  });
+}
+
+function startSurvey() {
+  document.getElementById('s-intro').style.display = 'none';
+  document.getElementById('s-form').style.display  = 'block';
+  buildSteps();
+  renderStep(0);
+}
+
+function renderStep(idx) {
+  current = idx;
+  buildSteps(); // neu berechnen wegen Branching
+
+  var step = steps[idx];
+  var total = steps.length;
+
+  // Progress
+  document.getElementById('s-bar').style.width = Math.round((idx / total) * 100) + '%';
+  document.getElementById('s-step-label').textContent = step.label;
+  document.getElementById('s-question').textContent   = step.question;
+  document.getElementById('s-hint').textContent       = step.hint || '';
+  document.getElementById('s-counter').textContent    = (idx + 1) + ' / ' + total;
+  document.getElementById('s-back').disabled = (idx === 0);
+
+  var box = document.getElementById('s-answers');
+  box.innerHTML = '';
+
+  if (step.type === 'single') {
+    var div = document.createElement('div');
+    div.className = 's-options';
+    step.options.forEach(function(opt) {
+      var btn = document.createElement('button');
+      btn.className = 's-option' + (answers[step.id] === opt.val ? ' chosen' : '');
+      btn.textContent = opt.label;
+      btn.onclick = function() {
+        answers[step.id] = opt.val;
+        advance();
+      };
+      div.appendChild(btn);
+    });
+    box.appendChild(div);
+
+  } else if (step.type === 'multi') {
+    if (!answers[step.id]) answers[step.id] = [];
+    var div = document.createElement('div');
+    div.className = 's-options';
+    step.options.forEach(function(opt) {
+      var btn = document.createElement('button');
+      var sel = answers[step.id].indexOf(opt.val) !== -1;
+      btn.className = 's-option' + (sel ? ' chosen' : '');
+      btn.textContent = (sel ? '✓ ' : '') + opt.label;
+      btn.onclick = function() {
+        var arr = answers[step.id];
+        var i   = arr.indexOf(opt.val);
+        if (i === -1) { arr.push(opt.val); } else { arr.splice(i, 1); }
+        renderStep(current); // re-render to update chosen states
+      };
+      div.appendChild(btn);
+    });
+    box.appendChild(div);
+    // Weiter-Button für Multi
+    var next = document.createElement('button');
+    next.className = 'btn btn-primary';
+    next.style.cssText = 'width:100%; justify-content:center; margin-top:0.5rem;';
+    next.textContent = 'Weiter →';
+    next.onclick = function() {
+      if (!answers[step.id] || answers[step.id].length === 0) {
+        answers[step.id] = ['keine_angabe'];
+      }
+      advance();
+    };
+    box.appendChild(next);
+
+  } else if (step.type === 'rating') {
+    var rDiv = document.createElement('div');
+    rDiv.className = 's-rating';
+    step.options.forEach(function(opt) {
+      var btn = document.createElement('button');
+      btn.className = 's-star' + (answers[step.id] === opt.val ? ' chosen' : '');
+      btn.textContent = opt.label;
+      btn.onclick = function() {
+        answers[step.id] = opt.val;
+        advance();
+      };
+      rDiv.appendChild(btn);
+    });
+    box.appendChild(rDiv);
+    var lDiv = document.createElement('div');
+    lDiv.className = 's-rating-labels';
+    lDiv.innerHTML = '<span>' + step.labels[0] + '</span><span>' + step.labels[1] + '</span>';
+    box.appendChild(lDiv);
+
+  } else if (step.type === 'email') {
+    var inp = document.createElement('input');
+    inp.type = 'email';
+    inp.className = 's-input';
+    inp.placeholder = 'name@beispiel.de (optional)';
+    inp.value = answers[step.id] || '';
+    inp.oninput = function() { answers[step.id] = inp.value; };
+    box.appendChild(inp);
+    var btn = document.createElement('button');
+    btn.className = 'btn btn-primary';
+    btn.style.cssText = 'width:100%; justify-content:center; font-size:1rem; padding:0.9rem 1.75rem;';
+    btn.textContent  = 'Umfrage abschicken';
+    btn.onclick = function() { submitSurvey(); };
+    box.appendChild(btn);
+    var skip = document.createElement('button');
+    skip.style.cssText = 'width:100%; text-align:center; background:none; border:none; font-family:Poppins,sans-serif; color:#bbb; font-size:0.825rem; cursor:pointer; margin-top:0.75rem;';
+    skip.textContent = 'Ohne E-Mail absenden';
+    skip.onclick = function() { submitSurvey(); };
+    box.appendChild(skip);
+  }
+}
+
+function advance() {
+  buildSteps();
+  if (current + 1 < steps.length) {
+    renderStep(current + 1);
+  } else {
+    submitSurvey();
+  }
+}
+
+function goBack() {
+  if (current > 0) renderStep(current - 1);
+}
+
+function submitSurvey() {
+  // Formfelder befüllen
+  var map = {
+    'f-heizung':    answers.heizung,
+    'f-pv':         answers.pv,
+    'f-pvgroesse':  answers.pvgroesse,
+    'f-batterie':   answers.batterie,
+    'f-gegenbatterie': Array.isArray(answers.gegenbatterie) ? answers.gegenbatterie.join(', ') : '',
+    'f-wp':         answers.wp,
+    'f-gegenwp':    Array.isArray(answers.gegenwp) ? answers.gegenwp.join(', ') : '',
+    'f-interesse':  answers.interesse,
+    'f-zahlung':    answers.zahlung,
+    'f-vsbatterie': answers.vsbatterie,
+    'f-email':      answers.email || 'keine Angabe'
+  };
+  for (var k in map) {
+    var el = document.getElementById(k);
+    if (el) el.value = map[k] || 'keine Angabe';
+  }
+
+  // AJAX-Submit
+  var form = document.getElementById('s-hidden-form');
+  fetch(form.action, {
+    method: 'POST',
+    body: new FormData(form),
+    headers: { 'Accept': 'application/json' }
+  }).finally(function() {
+    // Danke-Screen immer zeigen (auch bei Netzwerkfehler)
+    document.getElementById('s-form').style.display = 'none';
+    document.getElementById('s-done').classList.add('show');
+    document.getElementById('s-bar').style.width = '100%';
+  });
+}
+</script>
+</body>
+</html>

@@ -548,3 +548,9 @@ a.config-preview:hover { opacity: 0.88; transform: translateY(-2px); transition:
 }
 
 
+
+/* ===== SPRACHWECHSLER ===== */
+.lang-switch { display: flex; align-items: center; gap: 0.35rem; }
+.lang-sep { color: #bbb; font-size: 0.75rem; }
+.lang-active { font-weight: 700 !important; color: #333 !important; }
+.lang-switch a { padding: 0.45rem 0.4rem !important; font-size: 0.8rem !important; }

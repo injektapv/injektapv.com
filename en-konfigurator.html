@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configure product – InjektaPV</title>
+  <meta name="description" content="Find the right InjektaPV variant for your PV system in 4 steps.">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .config-page {
+      min-height: 100vh;
+      background: var(--cream);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .config-main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1.25rem;
+    }
+
+    .config-card {
+      background: var(--white);
+      border: 1px solid var(--warm-gray);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 680px;
+      padding: 2.75rem;
+      box-shadow: 0 8px 40px rgba(43,58,59,0.08);
+    }
+
+    /* Progress */
+    .config-progress {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 2.25rem;
+    }
+    .progress-step {
+      height: 4px;
+      flex: 1;
+      border-radius: 4px;
+      background: var(--warm-gray);
+      transition: background 0.35s;
+    }
+    .progress-step.done   { background: var(--gold); }
+    .progress-step.active { background: var(--teal); }
+
+    .config-step-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    .config-question {
+      font-size: clamp(1.2rem, 3vw, 1.55rem);
+      font-weight: 700;
+      color: var(--teal);
+      margin-bottom: 0.5rem;
+      line-height: 1.25;
+    }
+    .config-hint {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+
+    /* Answer options */
+    .config-options {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.875rem;
+      margin-bottom: 2rem;
+    }
+    .config-options.three-col { grid-template-columns: repeat(3, 1fr); }
+
+    .config-option {
+      border: 2px solid var(--warm-gray);
+      border-radius: 12px;
+      padding: 1.25rem 1rem;
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.18s, background 0.18s, transform 0.15s;
+      user-select: none;
+    }
+    .config-option:hover {
+      border-color: var(--teal);
+      background: #f5f4f0;
+      transform: translateY(-2px);
+    }
+    .config-option.selected {
+      border-color: var(--teal);
+      background: rgba(43,58,59,0.04);
+    }
+    .config-option-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+    .config-option-label {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: var(--teal);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+    .config-option-sub {
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+
+    /* Navigation */
+    .config-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .config-back {
+      background: none;
+      border: none;
+      font-family: 'Aptos', 'Calibri', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: color 0.18s;
+    }
+    .config-back:hover { color: var(--teal); }
+    .config-back:disabled { opacity: 0; pointer-events: none; }
+
+    .config-counter {
+      font-size: 0.8125rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+
+    /* ===== RESULT ===== */
+    .result-screen { display: none; text-align: center; }
+    .result-screen.visible { display: block; }
+
+    .result-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(254,211,111,0.2);
+      color: var(--teal);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.35rem 0.9rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+    }
+
+    .result-model {
+      font-size: clamp(2.5rem, 6vw, 4rem);
+      font-weight: 800;
+      color: var(--teal);
+      margin-bottom: 0.25rem;
+    }
+    .result-power {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--gold-dark);
+      margin-bottom: 1rem;
+    }
+    .result-desc {
+      font-size: 0.9625rem;
+      color: var(--muted);
+      max-width: 440px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    .result-why {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+      text-align: left;
+    }
+    .result-why h4 {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--teal);
+      opacity: 0.6;
+      margin-bottom: 0.75rem;
+    }
+    .result-why ul { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+    .result-why li {
+      font-size: 0.875rem;
+      color: #555;
+      padding-left: 1.25rem;
+      position: relative;
+    }
+    .result-why li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #15803d;
+      font-weight: 700;
+    }
+
+    .result-actions {
+      display: flex;
+      gap: 0.875rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .result-restart {
+      background: none;
+      border: none;
+      font-family: 'Aptos', 'Calibri', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      cursor: pointer;
+      margin-top: 1.25rem;
+      text-decoration: underline;
+    }
+    .result-restart:hover { color: var(--teal); }
+
+    /* Step container */
+    .step-screen { display: none; }
+    .step-screen.visible { display: block; }
+
+    @media (max-width: 520px) {
+      .config-card { padding: 1.75rem 1.25rem; border-radius: 16px; }
+      .config-options { grid-template-columns: 1fr 1fr; }
+      .config-options.three-col { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 380px) {
+      .config-options { grid-template-columns: 1fr; }
+    }
+  
+    /* ===== WARTELISTE IM KONFIGURATOR ===== */
+    .waitlist-block {
+      background: var(--cream, #FBFAF6);
+      border-radius: 12px;
+      padding: 1.75rem;
+      margin: 1.5rem 0 1rem;
+      text-align: left;
+    }
+    .waitlist-intro {
+      font-size: 0.9rem;
+      color: #505050;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    .waitlist-inputs {
+      display: flex;
+      gap: 0.625rem;
+      flex-wrap: wrap;
+    }
+    .waitlist-inputs input {
+      flex: 1;
+      min-width: 140px;
+      font-family: 'Aptos', 'Calibri', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 0.875rem;
+      padding: 0.65rem 0.9rem;
+      border: 1.5px solid #C9D5D6;
+      border-radius: 8px;
+      outline: none;
+      background: #fff;
+    }
+    .waitlist-inputs input:focus { border-color: #333333; }
+    .waitlist-inputs .btn { white-space: nowrap; padding: 0.65rem 1.25rem; font-size: 0.875rem; }
+    .waitlist-note { font-size: 0.72rem; color: #888; margin-top: 0.75rem; }
+    .waitlist-feedback { display: none; font-size: 0.875rem; font-weight: 500;
+      padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 0.75rem; }
+    .waitlist-feedback.success { display: block; background: #f0fdf4; color: #166534; }
+    .waitlist-feedback.error   { display: block; background: #fef2f2; color: #991b1b; }
+
+  </style>
+</head>
+<body class="config-page">
+
+<div id="nav-placeholder"></div>
+
+<!-- ========== CONFIGURATOR ========== -->
+<main class="config-main">
+  <div class="config-card">
+
+    <!-- SCHRITT-ANZEIGE -->
+    <div class="config-progress" id="progress-bar" aria-hidden="true">
+      <div class="progress-step active" id="ps-1"></div>
+      <div class="progress-step" id="ps-2"></div>
+      <div class="progress-step" id="ps-3"></div>
+      <div class="progress-step" id="ps-4"></div>
+    </div>
+
+    <!-- SCHRITT 1: PV-Größe -->
+    <div class="step-screen visible" id="step-1">
+      <p class="config-step-label">Step 1 of 4</p>
+      <h2 class="config-question">How large is your PV system?</h2>
+      <p class="config-hint">The installed capacity is stated in your system data sheet or feed-in contract.</p>
+      <div class="config-options three-col">
+        <div class="config-option" data-step="1" data-value="0" data-label="Unter 5 kWp" role="button" tabindex="0">
+          <span class="config-option-icon">🏠</span>
+          <span class="config-option-label">Unter 5 kWp</span>
+          <span class="config-option-sub">Small roof</span>
+        </div>
+        <div class="config-option" data-step="1" data-value="1" data-label="5 – 10 kWp" role="button" tabindex="0">
+          <span class="config-option-icon">🏡</span>
+          <span class="config-option-label">5 – 10 kWp</span>
+          <span class="config-option-sub">Standard system</span>
+        </div>
+        <div class="config-option" data-step="1" data-value="2" data-label="Über 10 kWp" role="button" tabindex="0">
+          <span class="config-option-icon">🏘️</span>
+          <span class="config-option-label">Über 10 kWp</span>
+          <span class="config-option-sub">Large system</span>
+        </div>
+      </div>
+      <div class="config-nav">
+        <button class="config-back" disabled>← Back</button>
+        <span class="config-counter">1 / 4</span>
+      </div>
+    </div>
+
+    <!-- SCHRITT 2: Haushaltsgröße -->
+    <div class="step-screen" id="step-2">
+      <p class="config-step-label">Step 2 of 4</p>
+      <h2 class="config-question">How many people live in your household?</h2>
+      <p class="config-hint">Mehr Personen bedeuten höheren Warmwasserbedarf: das beeinflusst die passende Leistungsklasse.</p>
+      <div class="config-options three-col">
+        <div class="config-option" data-step="2" data-value="0" data-label="1–2 Personen" role="button" tabindex="0">
+          <span class="config-option-icon">👤</span>
+          <span class="config-option-label">1–2 Personen</span>
+          <span class="config-option-sub">Single / Couple</span>
+        </div>
+        <div class="config-option" data-step="2" data-value="1" data-label="3–4 Personen" role="button" tabindex="0">
+          <span class="config-option-icon">👨‍👩‍👦</span>
+          <span class="config-option-label">3–4 Personen</span>
+          <span class="config-option-sub">Small family</span>
+        </div>
+        <div class="config-option" data-step="2" data-value="2" data-label="5+ Personen" role="button" tabindex="0">
+          <span class="config-option-icon">👨‍👩‍👧‍👦</span>
+          <span class="config-option-label">5+ Personen</span>
+          <span class="config-option-sub">Large family</span>
+        </div>
+      </div>
+      <div class="config-nav">
+        <button class="config-back" onclick="goBack(2)">← Back</button>
+        <span class="config-counter">2 / 4</span>
+      </div>
+    </div>
+
+    <!-- SCHRITT 3: Heizsystem -->
+    <div class="step-screen" id="step-3">
+      <p class="config-step-label">Step 3 of 4</p>
+      <h2 class="config-question">What type of heating system do you have?</h2>
+      <p class="config-hint">Injekta works with gas, oil and pellet heating as well as district heating: überall, wo ein Pufferspeicher vorhanden ist oder geplant wird.</p>
+      <div class="config-options">
+        <div class="config-option" data-step="3" data-value="0" data-label="Gas- oder Ölheizung" role="button" tabindex="0">
+          <span class="config-option-icon">🔥</span>
+          <span class="config-option-label">Gas- oder Ölheizung</span>
+          <span class="config-option-sub">With hot water tank</span>
+        </div>
+        <div class="config-option" data-step="3" data-value="0" data-label="Pellet / Holz" role="button" tabindex="0">
+          <span class="config-option-icon">🪵</span>
+          <span class="config-option-label">Pellet / Holz</span>
+          <span class="config-option-sub">With hot water tank</span>
+        </div>
+        <div class="config-option" data-step="3" data-value="0" data-label="Fernwärme" role="button" tabindex="0">
+          <span class="config-option-icon">🏙️</span>
+          <span class="config-option-label">Fernwärme</span>
+          <span class="config-option-sub">With hot water tank</span>
+        </div>
+        <div class="config-option" data-step="3" data-value="0" data-label="Heat pump" role="button" tabindex="0">
+          <span class="config-option-icon">❄️</span>
+          <span class="config-option-label">Heat pump</span>
+          <span class="config-option-sub">Please get in touch</span>
+        </div>
+      </div>
+      <div class="config-nav">
+        <button class="config-back" onclick="goBack(3)">← Back</button>
+        <span class="config-counter">3 / 4</span>
+      </div>
+    </div>
+
+    <!-- SCHRITT 4: Pufferspeicher -->
+    <div class="step-screen" id="step-4">
+      <p class="config-step-label">Step 4 of 4</p>
+      <h2 class="config-question">Do you have a hot water storage tank?</h2>
+      <p class="config-hint">Injekta heats the water in the heating circuit: ein Pufferspeicher nimmt diese Wärme auf und speichert sie.</p>
+      <div class="config-options">
+        <div class="config-option" data-step="4" data-value="0" data-label="Ja, unter 300 Liter" role="button" tabindex="0">
+          <span class="config-option-icon">🪣</span>
+          <span class="config-option-label">Ja, unter 300 L</span>
+          <span class="config-option-sub">Small tank</span>
+        </div>
+        <div class="config-option" data-step="4" data-value="1" data-label="Ja, über 300 Liter" role="button" tabindex="0">
+          <span class="config-option-icon">🛢️</span>
+          <span class="config-option-label">Ja, über 300 L</span>
+          <span class="config-option-sub">Large tank</span>
+        </div>
+        <div class="config-option" data-step="4" data-value="0" data-label="Nein / Weiß nicht" role="button" tabindex="0">
+          <span class="config-option-icon">❓</span>
+          <span class="config-option-label">Nein / Weiß nicht</span>
+          <span class="config-option-sub">Retrofit possible</span>
+        </div>
+        <div class="config-option" data-step="4" data-value="0" data-label="Wird noch geplant" role="button" tabindex="0">
+          <span class="config-option-icon">📋</span>
+          <span class="config-option-label">Wird noch geplant</span>
+          <span class="config-option-sub">New installation</span>
+        </div>
+      </div>
+      <div class="config-nav">
+        <button class="config-back" onclick="goBack(4)">← Back</button>
+        <span class="config-counter">4 / 4</span>
+      </div>
+    </div>
+
+    <!-- ERGEBNIS -->
+    <div class="result-screen" id="result-screen">
+      <div class="result-badge" id="result-badge">✓ Your recommendation</div>
+      <div class="result-model" id="result-model">Duplex</div>
+      <div class="result-power" id="result-power">1 – 6 kW Heizleistung</div>
+      <p class="result-desc" id="result-desc">Based on your answers, the InjektaPV Duplex is the optimal choice for your situation.</p>
+
+      <div class="result-why">
+        <h4>Why this recommendation?</h4>
+        <ul id="result-reasons"></ul>
+      </div>
+
+      <div class="waitlist-block">
+        <p class="waitlist-intro">Injekta will be available soon. Register now and we will let you know as soon as your model is available.</p>
+        <div class="waitlist-feedback" id="wl-feedback" role="alert"></div>
+        <form id="wl-form" class="waitlist-form"
+              action="https://formspree.io/f/mjyvvpby"
+              method="POST">
+          <input type="hidden" name="empfohlenes_modell" id="wl-model" value="">
+          <input type="hidden" name="_subject" value="Neue Wartelisten-Anmeldung">
+          <div class="waitlist-inputs">
+            <input type="text"  name="vorname" placeholder="First name" required autocomplete="given-name">
+            <input type="email" name="email"   placeholder="Email address" required autocomplete="email">
+            <button type="submit" class="btn btn-primary" id="wl-submit">Join waitlist</button>
+          </div>
+          <p class="waitlist-note">No spam. Just one message when Injekta is available.</p>
+        </form>
+      </div>
+      <button class="result-restart" onclick="restart()">↺ Start again</button>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  // ===== STATE =====
+  const answers  = { 1: null, 2: null, 3: null, 4: null };
+  const labels   = { 1: null, 2: null, 3: null, 4: null };
+  let heatpumpWarning = false;
+
+  // ===== PRODUCTS =====
+  const products = {
+    simplex: {
+      model: 'Simplex',
+      power: '0,3 – 1,9 kW Heizleistung',
+      desc:  'Ideal for smaller PV systems and 1 to 2-person households. Compact design, easy retrofitting.',
+      reasons: [
+        'Ihre PV-Anlage erzeugt überschaubare Überschüsse',
+        'Für 1–2 Personen ist 1,9 kW Spitzenleistung ausreichend',
+        'Smallest and most affordable Injekta variant',
+      ]
+    },
+    duplex: {
+      model: 'Duplex',
+      power: '1 – 6 kW Heizleistung',
+      desc:  'The most recommended variant for standard households with 5–10 kWp PV and 3–4 people. Step-by-step control.',
+      reasons: [
+        'Your PV system matches the medium power class',
+        'Step-by-step control (1–6 kW) optimally uses surpluses',
+        'Recommended for households with 3–4 people',
+      ]
+    },
+    triplex: {
+      model: 'Triplex',
+      power: '1 – 9 kW Heizleistung',
+      desc:  'For large PV systems of 10 kWp and above and households with 5 or more people. Highest power class.',
+      reasons: [
+        'Your large PV system generates significant surpluses',
+        'High hot water demand for 5+ people is covered',
+        'Up to 9 kW peak power, swarm aggregation optional',
+      ]
+    },
+    contact: {
+      model: 'Bitte anfragen',
+      power: 'Individuell',
+      desc:  'Bei Heat pumpn-Systemen gibt es Besonderheiten zu beachten. Nehmen Sie gerne Kontakt auf: wir beraten Sie individuell.',
+      reasons: [
+        'Heat pumpn ersetzen in der Regel den alten Pufferspeicher',
+        'Neue Tanks haben oft bereits eine Heizpatrone eingebaut',
+        'Injekta is particularly interesting for instantaneous water heaters',
+      ]
+    }
+  };
+
+  // ===== LOGIC =====
+  function calcResult() {
+    if (labels[3] === 'Heat pump') return 'contact';
+    const score = (answers[1] || 0) + (answers[2] || 0);
+    if (score <= 0) return 'simplex';
+    if (score <= 2) return 'duplex';
+    return 'triplex';
+  }
+
+  function showResult() {
+    // Hide all steps
+    document.querySelectorAll('.step-screen').forEach(s => s.classList.remove('visible'));
+    document.getElementById('progress-bar').style.display = 'none';
+
+    const key = calcResult();
+    const p   = products[key];
+
+    document.getElementById('result-model').textContent = p.model;
+    document.getElementById('result-power').textContent = p.power;
+    document.getElementById('result-desc').textContent  = p.desc;
+
+    const ul = document.getElementById('result-reasons');
+    ul.innerHTML = p.reasons.map(r => `<li>${r}</li>`).join('');
+
+    document.getElementById('result-screen').classList.add('visible');
+    // Empfohlenes Modell in Formular-Hidden-Field schreiben
+    document.getElementById('wl-model').value = p.model;
+  }
+
+  function goBack(fromStep) {
+    document.getElementById(`step-${fromStep}`).classList.remove('visible');
+    document.getElementById(`step-${fromStep - 1}`).classList.add('visible');
+    updateProgress(fromStep - 1);
+    answers[fromStep] = null;
+  }
+
+  function restart() {
+    Object.keys(answers).forEach(k => answers[k] = null);
+    document.querySelectorAll('.config-option').forEach(o => o.classList.remove('selected'));
+    document.getElementById('result-screen').classList.remove('visible');
+    document.getElementById('progress-bar').style.display = 'flex';
+    document.getElementById('step-1').classList.add('visible');
+    updateProgress(1);
+  }
+
+  function updateProgress(activeStep) {
+    for (let i = 1; i <= 4; i++) {
+      const el = document.getElementById(`ps-${i}`);
+      el.className = 'progress-step';
+      if (i < activeStep)  el.classList.add('done');
+      if (i === activeStep) el.classList.add('active');
+    }
+  }
+
+  // ===== OPTION CLICK =====
+  document.querySelectorAll('.config-option').forEach(opt => {
+    const activate = () => {
+      const step  = parseInt(opt.dataset.step);
+      const value = parseInt(opt.dataset.value);
+      const label = opt.dataset.label;
+
+      // Highlight selected in this step
+      document.querySelectorAll(`.config-option[data-step="${step}"]`)
+              .forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+
+      answers[step] = value;
+      labels[step]  = label;
+
+      // Brief pause so user sees the selection, then advance
+      setTimeout(() => {
+        if (step < 4) {
+          document.getElementById(`step-${step}`).classList.remove('visible');
+          document.getElementById(`step-${step + 1}`).classList.add('visible');
+          updateProgress(step + 1);
+        } else {
+          showResult();
+        }
+      }, 280);
+    };
+
+    opt.addEventListener('click', activate);
+    opt.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); activate(); } });
+  
+  // ===== WARTELISTEN-FORMULAR =====
+  const wlForm     = document.getElementById('wl-form');
+  const wlFeedback = document.getElementById('wl-feedback');
+  const wlSubmit   = document.getElementById('wl-submit');
+
+  if (wlForm) {
+    wlForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      wlSubmit.textContent = 'Registering…';
+      wlSubmit.disabled = true;
+      try {
+        const res = await fetch(wlForm.action, {
+          method: 'POST',
+          body: new FormData(wlForm),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          wlFeedback.className = 'waitlist-feedback success';
+          wlFeedback.textContent = 'Perfect! You are on the list. We will be in touch.';
+          wlForm.style.display = 'none';
+        } else { throw new Error(); }
+      } catch {
+        wlFeedback.className = 'waitlist-feedback error';
+        wlFeedback.textContent = 'Something went wrong. Please try again.';
+        wlSubmit.textContent = 'Join waitlist';
+        wlSubmit.disabled = false;
+      }
+    });
+  }
+
+});
+</script>
+
+<script src="en-components.js"></script>
+</body>
+</html>

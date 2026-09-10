@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About us – InjektaPV</title>
+  <meta name="description" content="Injekta PV GmbH, Filderstadt — Ralf Köhler and Dr. Julia Köhler.">
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .lang-switch { display:flex; align-items:center; gap:0.35rem; }
+    .lang-sep { color:#bbb; font-size:0.75rem; }
+    .lang-active { font-weight:700; color:#333 !important; }
+    .investor-inner { display:grid; grid-template-columns:1.1fr 0.9fr; gap:5rem; align-items:start; }
+    .investor-text h2 { margin-bottom:1rem; }
+    .investor-text p  { color:#505050; margin-bottom:1.25rem; font-size:0.9375rem; line-height:1.8; }
+    .investor-form-wrap { background:var(--cream); border-radius:14px; padding:2.5rem; }
+    .investor-feedback { padding:0.75rem 1rem; border-radius:8px; font-size:0.875rem; font-weight:500; margin-bottom:1rem; }
+    .investor-feedback.error { background:#fef2f2; color:#991b1b; }
+    @media (max-width:860px) { .investor-inner { grid-template-columns:1fr; gap:2rem; } }
+  </style>
+</head>
+<body>
+<div id="nav-placeholder"></div>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">About us</span>
+    <h1>One problem. One idea. One product.</h1>
+    <p>Injekta PV GmbH was founded in Filderstadt, Germany — driven by the conviction that surplus solar power should not go to waste.</p>
+  </div>
+</section>
+
+<!-- TEAM -->
+<section style="background: var(--white); padding: 5rem 0;">
+  <div class="container">
+    <div class="section-header">
+      <h2>Our Team</h2>
+    </div>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-photo-wrap">
+          <img src="/assets/team-ralf.jpg" alt="Ralf Köhler, Founder InjektaPV" class="team-photo" loading="lazy" onerror="this.style.display='none'; this.parentElement.style.background='var(--teal-light)';">
+        </div>
+        <span class="team-role">Technical Development</span>
+        <div class="team-name">Ralf Köhler</div>
+        <p>The original inventor and developer of Injekta. As an engineer, he brings decades of practical experience and identified as a lead user a problem that existing market solutions failed to solve convincingly. Drawing on that hands-on experience, he developed the solution himself.</p>
+      </div>
+      <div class="team-card">
+        <div class="team-photo-wrap">
+          <img src="/assets/team-julia.jpg" alt="Dr. Julia Köhler, Co-Founder InjektaPV" class="team-photo" loading="lazy" onerror="this.style.display='none'; this.parentElement.style.background='var(--teal-light)';">
+        </div>
+        <span class="team-role">Business Development</span>
+        <div class="team-name">Dr. Julia Köhler</div>
+        <p>Combines broad startup experience in GreenTech with an interdisciplinary academic background from a business school and a technical university. She brings together entrepreneurial thinking with a deep understanding of technology, innovation and sustainable transformation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROVEN IN THE FIELD -->
+<section style="background: var(--teal-light); padding: 5rem 0;">
+  <div class="container">
+    <div class="section-header">
+      <span class="eyebrow">Proven in the field</span>
+      <h2>In operation since 2023 in Filderstadt.</h2>
+      <p>Injekta runs not in a laboratory — but in a real single-family home, with a real PV system, under real conditions. That is the difference between an idea and a product.</p>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1.5rem; text-align:center;">
+      <div style="background:var(--white); border-radius:12px; padding:2rem;">
+        <div style="font-size:2rem; font-weight:800; color:#333;">2023</div>
+        <p style="font-size:0.875rem; color:#505050; margin-top:0.25rem;">In operation since</p>
+      </div>
+      <div style="background:var(--white); border-radius:12px; padding:2rem;">
+        <div style="font-size:2rem; font-weight:800; color:#333;">1 to 6 kW</div>
+        <p style="font-size:0.875rem; color:#505050; margin-top:0.25rem;">Power range in operation</p>
+      </div>
+      <div style="background:var(--white); border-radius:12px; padding:2rem;">
+        <div style="font-size:2rem; font-weight:800; color:#333;">0</div>
+        <p style="font-size:0.875rem; color:#505050; margin-top:0.25rem;">Tank interventions performed</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INVESTORS -->
+<section id="investoren" style="background: var(--white); padding: 6rem 0;">
+  <div class="container">
+    <div class="investor-inner">
+      <div class="investor-text">
+        <span class="eyebrow">Investors</span>
+        <h2>Interested in a partnership?</h2>
+        <p>Injekta addresses one of the largest untapped levers of the energy transition: thermal storage capacity in millions of households that currently lies dormant. We are at an early stage and are looking for strategic investors who want to unlock this opportunity with us.</p>
+        <p>Leave your contact details and we will send you our current pitch deck.</p>
+      </div>
+      <div class="investor-form-wrap">
+        <div class="investor-feedback" id="inv-feedback" role="alert" style="display:none;"></div>
+        <div id="inv-success" style="display:none; text-align:center; padding:2rem 1rem;">
+          <div style="font-size:2.5rem; margin-bottom:1.25rem;">✉️</div>
+          <p style="font-weight:700; font-size:1.1rem; color:#333; margin-bottom:0.75rem;">Thank you for your interest.</p>
+          <p style="color:#505050; font-size:0.9375rem; max-width:360px; margin:0 auto 0.5rem; line-height:1.7;">We will send you the pitch deck within 24 hours.</p>
+          <p style="font-size:0.8rem; color:#888;">Please also check your spam folder.</p>
+        </div>
+        <form id="inv-form" action="https://formspree.io/f/xrpgevow" method="POST" novalidate>
+          <input type="hidden" name="_subject" value="Pitch Deck Request (EN)">
+          <div class="form-group">
+            <label for="inv-name">Name</label>
+            <input type="text" id="inv-name" name="name" placeholder="First and last name" required autocomplete="name">
+          </div>
+          <div class="form-group">
+            <label for="inv-email">Email address</label>
+            <input type="email" id="inv-email" name="email" placeholder="name@fund.com" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="inv-firma">Company <span class="optional">(optional)</span></label>
+            <input type="text" id="inv-firma" name="firma" placeholder="Fund or company name" autocomplete="organization">
+          </div>
+          <button type="submit" class="btn btn-primary" id="inv-submit" style="width:100%; justify-content:center; margin-top:0.5rem;">Request pitch deck</button>
+          <p style="font-size:0.72rem; color:#888; margin-top:0.75rem; text-align:center;">Your data will be treated confidentially and will not be shared with third parties.</p>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <span class="eyebrow">Contact</span>
+    <h2>Get in touch.</h2>
+    <p>Whether partnership, investor meeting or technical question, we respond directly.</p>
+    <a href="kontakt.html" class="btn btn-outline-dark">Contact us</a>
+  </div>
+</section>
+
+<div id="footer-placeholder"></div>
+<script src="components.js"></script>
+<script>
+  const invForm = document.getElementById('inv-form');
+  const invFeedback = document.getElementById('inv-feedback');
+  const invSuccess = document.getElementById('inv-success');
+  const invSubmit = document.getElementById('inv-submit');
+  if (invForm) {
+    invForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      invSubmit.textContent = 'Sending...'; invSubmit.disabled = true;
+      try {
+        const res = await fetch(invForm.action, { method:'POST', body:new FormData(invForm), headers:{'Accept':'application/json'} });
+        if (res.ok) { invForm.style.display='none'; invSuccess.style.display='block'; }
+        else throw new Error();
+      } catch {
+        invFeedback.style.display='block'; invFeedback.className='investor-feedback error';
+        invFeedback.textContent='Something went wrong. Please write to us at j.koehler@injektapv.com.';
+        invSubmit.textContent='Request pitch deck'; invSubmit.disabled=false;
+      }
+    });
+  }
+</script>
+</body>
+</html>

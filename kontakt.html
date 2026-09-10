@@ -1,75 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Contact – InjektaPV</title>
-  <link rel="stylesheet" href="../style.css">
+  <title>Kontakt – InjektaPV</title>
+  <meta name="description" content="Kontaktieren Sie InjektaPV – für Anfragen von Installateuren, Hausbesitzern, Investoren und Partnern.">
+  <link rel="stylesheet" href="style.css">
   <style>
-    .lang-switch{display:flex;align-items:center;gap:0.35rem;}.lang-sep{color:#bbb;font-size:0.75rem;}.lang-active{font-weight:700;color:#333!important;}
-    .kontakt-wrap{max-width:640px;margin:0 auto;background:var(--white);border-radius:14px;padding:2.75rem 3rem;}
-    .kontakt-wrap h2{margin-bottom:0.4rem;}.kontakt-wrap>p{color:var(--muted);font-size:0.9rem;margin-bottom:2rem;}
-    .form-submit{margin-top:1.75rem;}.form-submit .btn{width:100%;justify-content:center;padding:0.9rem 1.75rem;font-size:1rem;}
-    .form-note{font-size:0.78rem;color:var(--muted);text-align:center;margin-top:1rem;}
-    @media(max-width:520px){.kontakt-wrap{padding:1.75rem 1.5rem;}.form-row{grid-template-columns:1fr;gap:0;}}
+    .kontakt-wrap {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--white);
+      border: 1px solid var(--warm-gray);
+      border-radius: 14px;
+      padding: 2.75rem 3rem;
+    }
+    .kontakt-wrap h2 { margin-bottom: 0.4rem; }
+    .kontakt-wrap > p { color: var(--muted); font-size: 0.9rem; margin-bottom: 2rem; }
+    .form-submit { margin-top: 1.75rem; }
+    .form-submit .btn { width: 100%; justify-content: center; padding: 0.9rem 1.75rem; font-size: 1rem; }
+    .form-note { font-size: 0.78rem; color: var(--muted); text-align: center; margin-top: 1rem; }
+    @media (max-width: 520px) { .kontakt-wrap { padding: 1.75rem 1.5rem; } .form-row { grid-template-columns: 1fr; gap: 0; } }
   </style>
 </head>
 <body>
+
 <div id="nav-placeholder"></div>
 
 <section class="page-hero">
   <div class="container">
-    <span class="eyebrow">Contact</span>
-    <h1>Get in touch.</h1>
-    <p>Whether an installer question, investor meeting or partnership enquiry, we respond within 48 hours.</p>
+    <span class="eyebrow">Kontakt</span>
+    <h1>Sprechen Sie uns an.</h1>
+    <p>Ob Installateurfrage, Investorengespräch oder Partnerschaftsanfrage: wir antworten innerhalb von 48 Stunden.</p>
   </div>
 </section>
 
-<section style="background:var(--cream); padding:5rem 0;">
+<section style="background: var(--cream); padding: 5rem 0;">
   <div class="container">
     <div class="kontakt-wrap">
-      <h2>Send a message</h2>
-      <p>Fill in the form and we will get back to you.</p>
+      <h2>Nachricht senden</h2>
+      <p>Füllen Sie das Formular aus: wir melden uns bei Ihnen.</p>
+
       <div class="form-feedback" id="form-feedback" role="alert"></div>
+
       <form id="contact-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST" novalidate>
         <div class="form-row">
           <div class="form-group">
-            <label for="vorname">First name</label>
+            <label for="vorname">Vorname</label>
             <input type="text" id="vorname" name="vorname" placeholder="Julia" required autocomplete="given-name">
           </div>
           <div class="form-group">
-            <label for="nachname">Last name</label>
-            <input type="text" id="nachname" name="nachname" placeholder="Smith" required autocomplete="family-name">
+            <label for="nachname">Nachname</label>
+            <input type="text" id="nachname" name="nachname" placeholder="Müller" required autocomplete="family-name">
           </div>
         </div>
         <div class="form-group">
-          <label for="email">Email address</label>
-          <input type="email" id="email" name="email" placeholder="name@company.com" required autocomplete="email">
+          <label for="email">E-Mail-Adresse</label>
+          <input type="email" id="email" name="email" placeholder="name@unternehmen.de" required autocomplete="email">
         </div>
         <div class="form-group">
-          <label for="telefon">Phone <span class="optional">(optional)</span></label>
-          <input type="tel" id="telefon" name="telefon" placeholder="+44 ..." autocomplete="tel">
+          <label for="telefon">Telefon <span class="optional">(optional)</span></label>
+          <input type="tel" id="telefon" name="telefon" placeholder="+49 711 ..." autocomplete="tel">
         </div>
         <div class="form-group">
-          <label for="betreff">I am …</label>
+          <label for="betreff">Ich bin …</label>
           <select id="betreff" name="betreff" required>
-            <option value="" disabled selected>Please select</option>
-            <option value="shk">Heating installer / trade contractor</option>
-            <option value="hausbesitzer">Homeowner with PV system</option>
-            <option value="investor">Investor / funding body</option>
-            <option value="netzbetreiber">Grid operator / aggregator</option>
-            <option value="presse">Press / media</option>
-            <option value="sonstiges">Other</option>
+            <option value="" disabled selected>Bitte auswählen</option>
+            <option value="shk">SHK-Installateur / Handwerksbetrieb</option>
+            <option value="hausbesitzer">Hausbesitzer mit PV-Anlage</option>
+            <option value="investor">Investor / Fördermittelgeber</option>
+            <option value="netzbetreiber">Netzbetreiber / Aggregator</option>
+            <option value="presse">Presse / Medien</option>
+            <option value="sonstiges">Sonstiges</option>
           </select>
         </div>
         <div class="form-group">
-          <label for="nachricht">Your message</label>
-          <textarea id="nachricht" name="nachricht" placeholder="Briefly describe your enquiry…" required></textarea>
+          <label for="nachricht">Ihre Nachricht</label>
+          <textarea id="nachricht" name="nachricht" placeholder="Beschreiben Sie kurz Ihr Anliegen …" required></textarea>
         </div>
         <div class="form-submit">
-          <button type="submit" class="btn btn-primary" id="submit-btn">Send message</button>
+          <button type="submit" class="btn btn-primary" id="submit-btn">Nachricht senden</button>
         </div>
-        <p class="form-note">Your data is used solely for processing your enquiry and will not be shared with third parties.</p>
+        <p class="form-note">Ihre Daten werden ausschließlich zur Bearbeitung Ihrer Anfrage verwendet und nicht an Dritte weitergegeben.</p>
       </form>
     </div>
   </div>
@@ -78,17 +90,22 @@
 <div id="footer-placeholder"></div>
 <script src="components.js"></script>
 <script>
-  const form=document.getElementById('contact-form'),feedback=document.getElementById('form-feedback'),submitBtn=document.getElementById('submit-btn');
-  form.addEventListener('submit',async(e)=>{
+  const form = document.getElementById('contact-form');
+  const feedback = document.getElementById('form-feedback');
+  const submitBtn = document.getElementById('submit-btn');
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const req=form.querySelectorAll('[required]');let valid=true;
-    req.forEach(f=>{if(!f.value.trim()){f.style.borderColor='#ef4444';valid=false;}else{f.style.borderColor='';}});
-    if(!valid){feedback.className='form-feedback error';feedback.textContent='Please fill in all required fields.';return;}
-    submitBtn.textContent='Sending…';submitBtn.disabled=true;
-    try{const res=await fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}});
-    if(res.ok){feedback.className='form-feedback success';feedback.textContent='Thank you! We will be in touch within 48 hours.';form.reset();}else throw new Error();}
-    catch{feedback.className='form-feedback error';feedback.textContent='Something went wrong. Please write to j.koehler@injektapv.com.';}
-    submitBtn.textContent='Send message';submitBtn.disabled=false;
+    const required = form.querySelectorAll('[required]');
+    let valid = true;
+    required.forEach(f => { if (!f.value.trim()) { f.style.borderColor='#ef4444'; valid=false; } else { f.style.borderColor=''; } });
+    if (!valid) { feedback.className='form-feedback error'; feedback.textContent='Bitte füllen Sie alle Pflichtfelder aus.'; return; }
+    submitBtn.textContent = 'Wird gesendet …'; submitBtn.disabled = true;
+    try {
+      const res = await fetch(form.action, { method:'POST', body:new FormData(form), headers:{'Accept':'application/json'} });
+      if (res.ok) { feedback.className='form-feedback success'; feedback.textContent='Vielen Dank! Ihre Nachricht ist bei uns eingegangen. Wir melden uns innerhalb von 48 Stunden.'; form.reset(); }
+      else throw new Error();
+    } catch { feedback.className='form-feedback error'; feedback.textContent='Etwas ist schiefgelaufen. Bitte schreiben Sie uns direkt an j.koehler@injektapv.com.'; }
+    submitBtn.textContent='Nachricht senden'; submitBtn.disabled=false;
     feedback.scrollIntoView({behavior:'smooth',block:'nearest'});
   });
 </script>

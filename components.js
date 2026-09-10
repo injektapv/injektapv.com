@@ -48,7 +48,7 @@ const NAV_HTML = `
       <ul class="nav-links" id="nav-links" role="list">
         <li><a href="produkt.html">Produkt</a></li>
         <li><a href="ueber-uns.html">Über uns</a></li>
-        <li class="lang-switch"><a href="index.html" class="lang-active">DE</a><span class="lang-sep">|</span><a href="en/index.html">EN</a></li>
+        <li class="lang-switch"><a href="/index.html" class="lang-active">DE</a><span class="lang-sep">|</span><a href="/en/index.html">EN</a></li>
         <li><a href="kontakt.html" class="nav-cta">Kontakt</a></li>
       </ul>
     </div>

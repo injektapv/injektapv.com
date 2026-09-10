@@ -48,7 +48,7 @@ const NAV_HTML = `
       <ul class="nav-links" id="nav-links" role="list">
         <li><a href="produkt.html">Produkt</a></li>
         <li><a href="ueber-uns.html">Über uns</a></li>
-        <li class="lang-switch"><a href="/index.html" class="lang-active">DE</a><span class="lang-sep">|</span><a href="/en-index.html">EN</a></li>
+        <li class="lang-switch"><a href="/index.html" class="lang-active">DE</a><span class="lang-sep">|</span><a href="#" id="lang-en-link">EN</a></li>
         <li><a href="kontakt.html" class="nav-cta">Kontakt</a></li>
       </ul>
     </div>
@@ -127,4 +127,19 @@ const FOOTER_HTML = `
       hamburger.setAttribute('aria-expanded', 'false');
     }));
   }
+
+  // Seitenspezifischer Sprachwechsler
+  var pageMapDE = {
+    'index.html':       'en-index.html',
+    'produkt.html':     'en-produkt.html',
+    'ueber-uns.html':   'en-ueber-uns.html',
+    'kontakt.html':     'en-kontakt.html',
+    'konfigurator.html':'en-konfigurator.html',
+    'impressum.html':   'en-index.html',
+    'datenschutz.html': 'en-index.html',
+  };
+  var curPage = window.location.pathname.split('/').pop() || 'index.html';
+  var enLink = document.getElementById('lang-en-link');
+  if (enLink) enLink.href = '/' + (pageMapDE[curPage] || 'en-index.html');
+
 })();

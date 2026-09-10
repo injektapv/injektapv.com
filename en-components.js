@@ -31,8 +31,7 @@ const NAV_HTML = `
       <ul class="nav-links" id="nav-links" role="list">
         <li><a href="/en-produkt.html">Product</a></li>
         <li><a href="/en-ueber-uns.html">About</a></li>
-        <li><a href="impressum.html">Imprint</a></li>
-        <li class="lang-switch"><a href="/">DE</a><span class="lang-sep">|</span><a href="/en-index.html" class="lang-active">EN</a></li>
+        <li class="lang-switch"><a href="#" id="lang-de-link">DE</a><span class="lang-sep">|</span><a href="/en-index.html" class="lang-active">EN</a></li>
         <li><a href="/en-kontakt.html" class="nav-cta">Contact</a></li>
       </ul>
     </div>
@@ -64,8 +63,7 @@ const FOOTER_HTML = `
           <li><a href="/en-ueber-uns.html">About us</a></li>
           <li><a href="/en-ueber-uns.html#investoren">Investors</a></li>
           <li><a href="/en-kontakt.html">Contact</a></li>
-          <li><a href="impressum.html">Imprint</a></li>
-          <li><a href="datenschutz.html">Privacy</a></li>
+            <li><a href="datenschutz.html">Privacy</a></li>
         </ul>
       </div>
     </div>
@@ -96,4 +94,17 @@ const FOOTER_HTML = `
       hamburger.setAttribute('aria-expanded', 'false');
     }));
   }
+
+  // Seitenspezifischer Sprachwechsler
+  var pageMapEN = {
+    'en-index.html':       'index.html',
+    'en-produkt.html':     'produkt.html',
+    'en-ueber-uns.html':   'ueber-uns.html',
+    'en-kontakt.html':     'kontakt.html',
+    'en-konfigurator.html':'konfigurator.html',
+  };
+  var curPageEN = window.location.pathname.split('/').pop() || 'en-index.html';
+  var deLink = document.getElementById('lang-de-link');
+  if (deLink) deLink.href = '/' + (pageMapEN[curPageEN] || 'index.html');
+
 })();

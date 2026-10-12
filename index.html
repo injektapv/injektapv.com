@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>InjektaPV – Wir wissen wohin mit zu viel Strom</title>
-  <meta name="description" content="InjektaPV aktiviert bereits existierende Speicherkapazitäten in Ihrem Haus. PV-Überschuss direkt in Warmwasser, ohne Eingriff in den Brauchwassertank.">
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400;1,500&display=swap" rel="stylesheet">
+  <meta name="description" content="InjektaPV aktiviert existierende Speicherkapazitäten in Ihrem Haus. PV-Überschuss direkt in Warmwasser, ohne Eingriff in den Brauchwassertank.">
   <link rel="stylesheet" href="style.css">
   <style>
     /* ===== ZITATE-KARUSSELL ===== */
@@ -26,8 +25,8 @@
       justify-content: center;
     }
     .quotes-text {
-      font-family: 'Lora', Georgia, serif;
-      font-size: clamp(0.9rem, 1.6vw, 1.1rem);
+      font-family: Georgia, 'Times New Roman', serif;
+      font-size: clamp(0.95rem, 1.7vw, 1.15rem);
       font-style: italic;
       font-weight: 400;
       color: rgba(255,255,255,0.85);
@@ -89,9 +88,6 @@
   </div>
 </section>
 
-
-
-
 <!-- ZITATE-KARUSSELL -->
 <section class="quotes">
   <div class="quotes-inner">
@@ -122,8 +118,6 @@
     </div>
   </div>
 </div>
-
-
 
 <!-- WIE ES FUNKTIONIERT -->
 <section class="how-section">
@@ -175,7 +169,6 @@
   </div>
 </section>
 
-
 <!-- CTA -->
 <section class="cta-section">
   <div class="container">
@@ -196,10 +189,10 @@
     "Millionen Heizungskeller stehen ungenutzt da. Injekta verwandelt sie in Speicher, ohne dass etwas ausgetauscht werden muss.",
     "The market is good and the problem is real.",
     "Jede Kilowattstunde, die im Warmwasser landet, muss nicht aus dem Gasspeicher kommen. Das entlastet das ganze System.",
-    "Als Retrofit-L\u00f6sung besetzt Injekta genau die L\u00fccke, die alle anderen \u00fcbersehen haben.",
-    "H\u00e4tte ich Injekta gekannt, bevor ich meine Solarthermie gebaut habe, h\u00e4tte ich mich anders entschieden.",
-    "Diese L\u00f6sung fehlt dem Markt. Es gibt schlicht nichts Vergleichbares.",
-    "Der W\u00e4rmepumpenausbau braucht Jahrzehnte. Injekta liefert die Antwort f\u00fcr die Zeit dazwischen."
+    "Als Retrofit-Lösung besetzt Injekta genau die Lücke, die alle anderen übersehen haben.",
+    "Hätte ich Injekta gekannt, bevor ich meine Solarthermie gebaut habe, hätte ich mich anders entschieden.",
+    "Diese Lösung fehlt dem Markt. Es gibt schlicht nichts Vergleichbares.",
+    "Der Wärmepumpenausbau braucht Jahrzehnte. Injekta liefert die Antwort für die Zeit dazwischen."
   ];
 
   var textEl = document.getElementById('qtext');
@@ -210,7 +203,6 @@
   var timer = null;
   var DELAY = 5000;
 
-  // Dots erzeugen
   for (var n = 0; n < quotes.length; n++) {
     (function (idx) {
       var b = document.createElement('button');
@@ -237,14 +229,12 @@
   function next() { show((i + 1) % quotes.length); }
   function restart() { clearInterval(timer); timer = setInterval(next, DELAY); }
 
-  // Initial anzeigen (ohne Fade)
   textEl.textContent = quotes[0];
   textEl.style.opacity = '1';
   dotsEl.children[0].className = 'on';
 
   timer = setInterval(next, DELAY);
 
-  // Pause bei Hover
   var sec = document.querySelector('.quotes');
   sec.onmouseenter = function () { clearInterval(timer); };
   sec.onmouseleave = function () { restart(); };

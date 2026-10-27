@@ -78,7 +78,6 @@ const FOOTER_HTML = `
         <ul>
           <li><a href="ueber-uns.html">Über uns</a></li>
           <li><a href="kontakt.html">Kontakt</a></li>
-          <li><a href="ueber-uns.html#investoren">Investoren</a></li>
         </ul>
       </div>
     </div>
